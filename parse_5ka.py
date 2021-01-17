@@ -25,7 +25,8 @@ class Parse5ka:
     _params = {
         "records_per_page" : 50
     }
-    def __init__(self, start_url:str, result_path:Path):
+
+    def __init__(self, start_url: str, result_path: Path):
         self.start_url = start_url
         self.result_path = result_path
 
