@@ -74,7 +74,7 @@ class Parse5ka:
         # возвращает генратор, состоящий из продуктов на странице
 
     @staticmethod
-    def save(data:dict, file_path:Path):
+    def save(data: dict, file_path:Path):
         with file_path.open('w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False)
             # file.write(json.dumps(data)) --либо так, но так длиннее запись
