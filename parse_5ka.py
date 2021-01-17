@@ -2,6 +2,7 @@ import json
 import time
 from pathlib import Path
 import requests
+import os
 
 # ?categories=&ordering=&page=4&price_promo__gte=&price_promo__lte=&records_per_page=12&search=&store="
 # -- это параметры с разделителем &, напр 'categories' = None
@@ -114,6 +115,11 @@ if __name__ == '__main__':
     url_cat = 'https://5ka.ru/api/v2/categories/'
     # result_path = Path(__file__).parent.joinpath('products')
     result_path_categories = Path(__file__).parent.joinpath('categories')
-    # parser = Parse5ka(url, result_path)
+    try:
+        os.mkdir(result_path_categories)
+    except FileExistsError:
+        pass
+
+# parser = Parse5ka(url, result_path)
     parser2 = Categories(url, url_cat, result_path_categories)
     parser2.run()
