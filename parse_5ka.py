@@ -12,11 +12,13 @@ import os
 #
 # print(1)
 
+
 class ParseError(Exception):
     def __init__(self, text):
         self.text = text
 
         #Создаем класс ошибок
+
 
 class Parse5ka:
     _headers = {
@@ -78,6 +80,7 @@ class Parse5ka:
             # file.write(json.dumps(data)) --либо так, но так длиннее запись
         # сохраняет данные в отдельный файл
 
+
 class Categories(Parse5ka):
     def __init__(self, start_url:str, category_url:str, result_path:Path):
         super().__init__(start_url, result_path)
@@ -111,6 +114,7 @@ class Categories(Parse5ka):
             # собирает список товаров из этой категории и складывает в словарь заданного вида
             # затем сохраняет это в json, воспользовавшись методом save()
 
+
 if __name__ == '__main__':
     url = 'https://5ka.ru/api/v2/special_offers/'
     url_cat = 'https://5ka.ru/api/v2/categories/'
@@ -121,6 +125,6 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
 
-# parser = Parse5ka(url, result_path)
+    # parser = Parse5ka(url, result_path)
     parser2 = Categories(url, url_cat, result_path_categories)
     parser2.run()
