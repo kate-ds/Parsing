@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e999242-cbd7-4cfd-a0d3-18021737857e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/parse_5ka.py" beforeDir="false" afterPath="$PROJECT_DIR$/parse_5ka.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/Parsing.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parse_magnit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="lesson1" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -47,15 +50,37 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
     <property name="js.buildTools.gulp.gulp_package_dir" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.parse_magnit">
+    <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Parsing" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/parse_venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="Parsing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -100,6 +125,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="parse_magnit" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Parsing" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/parse_magnit.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="js.build_tools.grunt">
       <node-interpreter value="project" />
       <envs />
@@ -114,10 +161,16 @@
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.kinipoisk" />
+      <item itemvalue="Python.parse_magnit" />
+      <item itemvalue="Python.1" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.kinipoisk" />
+        <item itemvalue="Python.parse_magnit" />
         <item itemvalue="Python.1" />
+        <item itemvalue="Python.kinipoisk" />
       </list>
     </recent_temporary>
   </component>
@@ -147,6 +200,7 @@
       <workItem from="1610793059915" duration="1208000" />
       <workItem from="1610794414714" duration="3197000" />
       <workItem from="1610802920458" duration="50369000" />
+      <workItem from="1611136725098" duration="13755000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1610735354413</created>
@@ -224,11 +278,16 @@
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state x="360" y="23" key="#1/0.23.1280.726@0.23.1280.726" timestamp="1611093954668" />
-    <state x="102" y="68" width="1071" height="680" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610833304245">
-      <screen x="0" y="23" width="1280" height="725" />
+    <state x="102" y="69" width="1071" height="680" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611153942672">
+      <screen x="0" y="23" width="1280" height="728" />
     </state>
     <state x="102" y="68" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.725@0.23.1280.725" timestamp="1610833304245" />
-    <state x="102" y="69" width="1071" height="680" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.726@0.23.1280.726" timestamp="1610749842047" />
+    <state x="102" y="69" width="1071" height="680" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.726@0.23.1280.726" timestamp="1611137897974" />
+    <state x="102" y="69" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.728@0.23.1280.728" timestamp="1611153942672" />
+    <state x="383" y="195" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1611147648025">
+      <screen x="0" y="23" width="1280" height="727" />
+    </state>
+    <state x="383" y="195" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1280.727@0.23.1280.727" timestamp="1611147648025" />
     <state x="360" y="23" key="#kinipoisk" timestamp="1611094015054">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
@@ -238,42 +297,58 @@
     </state>
     <state x="195" y="23" key="CommitChangelistDialog2/0.23.1280.725@0.23.1280.725" timestamp="1610822169290" />
     <state x="195" y="23" key="CommitChangelistDialog2/0.23.1280.726@0.23.1280.726" timestamp="1610918426567" />
-    <state width="1238" height="179" key="GridCell.Tab.0.bottom" timestamp="1611094055379">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="224" key="GridCell.Tab.0.bottom" timestamp="1611160011967">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.bottom/0.23.1280.725@0.23.1280.725" timestamp="1610906286057" />
-    <state width="1238" height="179" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611094055379" />
-    <state width="1238" height="179" key="GridCell.Tab.0.center" timestamp="1611094055378">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="259" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611144739950" />
+    <state width="1238" height="259" key="GridCell.Tab.0.bottom/0.23.1280.727@0.23.1280.727" timestamp="1611148937967" />
+    <state width="1238" height="259" key="GridCell.Tab.0.bottom/0.23.1280.728@0.23.1280.728" timestamp="1611155461635" />
+    <state width="1238" height="224" key="GridCell.Tab.0.bottom/0.23.1280.729@0.23.1280.729" timestamp="1611160011967" />
+    <state width="1238" height="224" key="GridCell.Tab.0.center" timestamp="1611160011967">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.center/0.23.1280.725@0.23.1280.725" timestamp="1610906286056" />
-    <state width="1238" height="179" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1611094055378" />
-    <state width="1238" height="179" key="GridCell.Tab.0.left" timestamp="1611094055378">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="259" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1611144739949" />
+    <state width="1238" height="259" key="GridCell.Tab.0.center/0.23.1280.727@0.23.1280.727" timestamp="1611148937966" />
+    <state width="1238" height="259" key="GridCell.Tab.0.center/0.23.1280.728@0.23.1280.728" timestamp="1611155461634" />
+    <state width="1238" height="224" key="GridCell.Tab.0.center/0.23.1280.729@0.23.1280.729" timestamp="1611160011967" />
+    <state width="1238" height="224" key="GridCell.Tab.0.left" timestamp="1611160011966">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.left/0.23.1280.725@0.23.1280.725" timestamp="1610906286055" />
-    <state width="1238" height="179" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1611094055378" />
-    <state width="1238" height="179" key="GridCell.Tab.0.right" timestamp="1611094055379">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="259" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1611144739948" />
+    <state width="1238" height="259" key="GridCell.Tab.0.left/0.23.1280.727@0.23.1280.727" timestamp="1611148937966" />
+    <state width="1238" height="259" key="GridCell.Tab.0.left/0.23.1280.728@0.23.1280.728" timestamp="1611155461632" />
+    <state width="1238" height="224" key="GridCell.Tab.0.left/0.23.1280.729@0.23.1280.729" timestamp="1611160011966" />
+    <state width="1238" height="224" key="GridCell.Tab.0.right" timestamp="1611160011967">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.right/0.23.1280.725@0.23.1280.725" timestamp="1610906286056" />
-    <state width="1238" height="179" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1611094055379" />
-    <state width="1238" height="224" key="GridCell.Tab.1.bottom" timestamp="1611088344689">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="259" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1611144739950" />
+    <state width="1238" height="259" key="GridCell.Tab.0.right/0.23.1280.727@0.23.1280.727" timestamp="1611148937966" />
+    <state width="1238" height="259" key="GridCell.Tab.0.right/0.23.1280.728@0.23.1280.728" timestamp="1611155461635" />
+    <state width="1238" height="224" key="GridCell.Tab.0.right/0.23.1280.729@0.23.1280.729" timestamp="1611160011967" />
+    <state width="1238" height="224" key="GridCell.Tab.1.bottom" timestamp="1611160007324">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
-    <state width="1238" height="224" key="GridCell.Tab.1.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611088344689" />
-    <state width="1238" height="224" key="GridCell.Tab.1.center" timestamp="1611088344688">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="224" key="GridCell.Tab.1.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611144726562" />
+    <state width="1238" height="224" key="GridCell.Tab.1.bottom/0.23.1280.729@0.23.1280.729" timestamp="1611160007324" />
+    <state width="1238" height="224" key="GridCell.Tab.1.center" timestamp="1611160007324">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
-    <state width="1238" height="224" key="GridCell.Tab.1.center/0.23.1280.726@0.23.1280.726" timestamp="1611088344688" />
-    <state width="1238" height="224" key="GridCell.Tab.1.left" timestamp="1611088344688">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="224" key="GridCell.Tab.1.center/0.23.1280.726@0.23.1280.726" timestamp="1611144726557" />
+    <state width="1238" height="224" key="GridCell.Tab.1.center/0.23.1280.729@0.23.1280.729" timestamp="1611160007324" />
+    <state width="1238" height="224" key="GridCell.Tab.1.left" timestamp="1611160007323">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
-    <state width="1238" height="224" key="GridCell.Tab.1.left/0.23.1280.726@0.23.1280.726" timestamp="1611088344688" />
-    <state width="1238" height="224" key="GridCell.Tab.1.right" timestamp="1611088344689">
-      <screen x="0" y="23" width="1280" height="726" />
+    <state width="1238" height="224" key="GridCell.Tab.1.left/0.23.1280.726@0.23.1280.726" timestamp="1611144726557" />
+    <state width="1238" height="224" key="GridCell.Tab.1.left/0.23.1280.729@0.23.1280.729" timestamp="1611160007323" />
+    <state width="1238" height="224" key="GridCell.Tab.1.right" timestamp="1611160007324">
+      <screen x="0" y="23" width="1280" height="729" />
     </state>
-    <state width="1238" height="224" key="GridCell.Tab.1.right/0.23.1280.726@0.23.1280.726" timestamp="1611088344689" />
+    <state width="1238" height="224" key="GridCell.Tab.1.right/0.23.1280.726@0.23.1280.726" timestamp="1611144726560" />
+    <state width="1238" height="224" key="GridCell.Tab.1.right/0.23.1280.729@0.23.1280.729" timestamp="1611160007324" />
     <state x="128" y="84" key="MergeDialog" timestamp="1611130812692">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
@@ -291,6 +366,10 @@
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state x="522" y="310" key="VCS.EditChangelistDialog/0.23.1280.726@0.23.1280.726" timestamp="1610735670733" />
+    <state width="640" height="362" key="XDebugger.FullValuePopup" timestamp="1611159802589">
+      <screen x="0" y="23" width="1280" height="729" />
+    </state>
+    <state width="640" height="362" key="XDebugger.FullValuePopup/0.23.1280.729@0.23.1280.729" timestamp="1611159802589" />
     <state x="420" y="97" key="com.intellij.execution.console.ConsoleHistoryController$MyBrowseAction$1" timestamp="1611085544677">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
@@ -308,10 +387,27 @@
     </state>
     <state x="379" y="105" key="git4idea.branch.GitSmartOperationDialog/0.23.1280.726@0.23.1280.726" timestamp="1611130634428" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/parse_magnit.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="url" />
+      </configuration>
+    </watches-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Parsing$parse_5ka.coverage" NAME="parse_5ka Coverage Results" MODIFIED="1610912184762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Parsing$parse_magnit.coverage" NAME="parse_magnit Coverage Results" MODIFIED="1611159866594" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Parsing$kinipoisk.coverage" NAME="kinipoisk Coverage Results" MODIFIED="1611094015083" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Parsing$Parsing.coverage" NAME="Parsing Coverage Results" MODIFIED="1610793333900" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
-    <SUITE FILE_PATH="coverage/Parsing$1.coverage" NAME="1 Coverage Results" MODIFIED="1611088675473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Parsing$1.coverage" NAME="1 Coverage Results" MODIFIED="1611144739936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
   </component>
 </project>
