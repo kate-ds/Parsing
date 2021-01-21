@@ -86,7 +86,7 @@ class MagnitParser:
             'new_price': lambda tag: self.get_price(tag, 'label__price_new'),
             'image_url': lambda tag: urljoin(self.start_url, tag.find('source').attrs.get('data-srcset')),
             'date_from': lambda tag: self.get_date(tag, 0),
-            'date_to': lambda tag: self.get_date(tag, 0)
+            'date_to': lambda tag: self.get_date(tag, 1)
         }
 
     def _get_product_data(self, product_tag: bs4.Tag) -> dict:
