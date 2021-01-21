@@ -1,9 +1,15 @@
 import os
+import time
 import requests
 import bs4
 from urllib.parse import urljoin
 import pymongo
 from dotenv import load_dotenv
+
+
+class ParseError(Exception):
+    def __init__(self, text):
+        self.text = text
 
 
 class MagnitParcer:
@@ -22,9 +28,16 @@ class MagnitParcer:
 
     @staticmethod
     def _get_response(url, *args, **kwargs):
-        # todo надо обработать ошибки запросов с сделать повторный запрос
-        response = requests.get(url, *args, **kwargs)
-        return response
+        while True:
+            try:
+                response = requests.get(url, *args, **kwargs)
+                if response.status_code > 399:
+                    raise ParseError(response.status_code)
+                time.sleep(0.1)
+                return response
+            except (requests.RequestException, ParseError):
+                time.sleep(0.5)
+                continue
 
     @staticmethod
     def _get_soup(response):
