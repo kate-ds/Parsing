@@ -69,9 +69,9 @@ class MagnitParser:
            return None
 
     @staticmethod
-    def get_date(product_tag, binnary: bin) -> datetime:
+    def get_date(product_tag, binary: bin) -> datetime:
         try:
-            date = product_tag.find('div', class_='card-sale__date').findChildren()[binnary].text[2:].strip()
+            date = product_tag.find('div', class_='card-sale__date').findChildren()[binary].text[2:].strip()
             return datetime.strptime(f"{date} {datetime.now().year}", "%d %B %Y")
         except:
             pass
