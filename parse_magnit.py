@@ -5,6 +5,9 @@ import bs4
 from urllib.parse import urljoin
 import pymongo
 from dotenv import load_dotenv
+from datetime import datetime
+import locale
+locale.setlocale(locale.LC_ALL, 'ru_RU')
 
 
 class ParseError(Exception):
@@ -12,7 +15,7 @@ class ParseError(Exception):
         self.text = text
 
 
-class MagnitParcer:
+class MagnitParser:
     _headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15'
     }
@@ -57,11 +60,33 @@ class MagnitParcer:
         for product_tag in catalog_main.find_all('a', attrs={'class': 'card-sale'}):
             yield self._get_product_data(product_tag)
 
+    @staticmethod
+    def get_price(product_tag, attr: str) -> float or None:
+       try:
+           price: list = (product_tag.find('div', attrs={'class' : attr}).text)[1 : -1].split('\n')
+           return float('.'.join(price))
+       except:
+           return None
+
+    @staticmethod
+    def get_date(product_tag, binnary: bin) -> datetime:
+        try:
+            date = product_tag.find('div', class_='card-sale__date').findChildren()[binnary].text[2:].strip()
+            return datetime.strptime(f"{date} {datetime.now().year}", "%d %B %Y")
+        except:
+            pass
+
     @property
-    def data_template(self):
+    def data_template(self) -> dict:
         return {
             'url': lambda tag: urljoin(self.start_url, tag.attrs.get('href')),
-            'title': lambda tag: tag.find('div', attrs={'class': 'card-sale__title'}).text,
+            'promo_name':lambda tag: tag.find('div', attrs={'class' : 'card-sale__header'}).text,
+            'product_name': lambda tag: tag.find('div', attrs={'class': 'card-sale__title'}).text,
+            'old_price': lambda tag: self.get_price(tag, 'label__price_old'),
+            'new_price': lambda tag: self.get_price(tag, 'label__price_new'),
+            'image_url': lambda tag: urljoin(self.start_url, tag.find('source').attrs.get('data-srcset')),
+            'date_from': lambda tag: self.get_date(tag, 0),
+            'date_to': lambda tag: self.get_date(tag, 0)
         }
 
     def _get_product_data(self, product_tag: bs4.Tag) -> dict:
@@ -73,7 +98,9 @@ class MagnitParcer:
                 pass
         return data
 
+
     def save(self, data):
+        print(data)
         collection = self.data_base["magnit"]
         collection.insert_one(data)
         pass
@@ -84,5 +111,5 @@ if __name__ == '__main__':
     data_base_url = os.getenv('DATA_BASE_URL')
     data_client = pymongo.MongoClient(data_base_url)
     url = 'https://magnit.ru/promo/'
-    parser = MagnitParcer(url, data_client)
+    parser = MagnitParser(url, data_client)
     parser.run()
