@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e999242-cbd7-4cfd-a0d3-18021737857e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/use_pymongo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geekbrains_parse/database.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geekbrains_parse/geekbrains_blog_parse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/geekbrains_parse/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +37,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Homework2" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -231,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610918426953</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add pymongo using">
+      <created>1611334347775</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1611334347775</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,7 +254,8 @@
     <MESSAGE value="5ka project - Add method for parsing categories" />
     <MESSAGE value="5ka project - Add creating folder 'categories'" />
     <MESSAGE value="5ka project - Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="5ka project - Changes" />
+    <MESSAGE value="add pymongo using" />
+    <option name="LAST_COMMIT_MESSAGE" value="add pymongo using" />
   </component>
   <component name="WindowStateProjectService">
     <state x="360" y="23" key="#1" timestamp="1611093954668">
@@ -260,31 +271,31 @@
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state x="360" y="23" key="#kinipoisk/0.23.1280.726@0.23.1280.726" timestamp="1611094015054" />
-    <state x="195" y="23" key="CommitChangelistDialog2" timestamp="1610918426567">
+    <state x="195" y="23" key="CommitChangelistDialog2" timestamp="1611334347564">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state x="195" y="23" key="CommitChangelistDialog2/0.23.1280.725@0.23.1280.725" timestamp="1610822169290" />
-    <state x="195" y="23" key="CommitChangelistDialog2/0.23.1280.726@0.23.1280.726" timestamp="1610918426567" />
-    <state width="1238" height="227" key="GridCell.Tab.0.bottom" timestamp="1611334274539">
+    <state x="195" y="23" key="CommitChangelistDialog2/0.23.1280.726@0.23.1280.726" timestamp="1611334347564" />
+    <state width="1238" height="227" key="GridCell.Tab.0.bottom" timestamp="1611346802129">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.bottom/0.23.1280.725@0.23.1280.725" timestamp="1610906286057" />
-    <state width="1238" height="227" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611334274539" />
-    <state width="1238" height="227" key="GridCell.Tab.0.center" timestamp="1611334274538">
+    <state width="1238" height="227" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1611346802129" />
+    <state width="1238" height="227" key="GridCell.Tab.0.center" timestamp="1611346802128">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.center/0.23.1280.725@0.23.1280.725" timestamp="1610906286056" />
-    <state width="1238" height="227" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1611334274538" />
-    <state width="1238" height="227" key="GridCell.Tab.0.left" timestamp="1611334274538">
+    <state width="1238" height="227" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1611346802128" />
+    <state width="1238" height="227" key="GridCell.Tab.0.left" timestamp="1611346802127">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.left/0.23.1280.725@0.23.1280.725" timestamp="1610906286055" />
-    <state width="1238" height="227" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1611334274538" />
-    <state width="1238" height="227" key="GridCell.Tab.0.right" timestamp="1611334274539">
+    <state width="1238" height="227" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1611346802127" />
+    <state width="1238" height="227" key="GridCell.Tab.0.right" timestamp="1611346802128">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1238" height="179" key="GridCell.Tab.0.right/0.23.1280.725@0.23.1280.725" timestamp="1610906286056" />
-    <state width="1238" height="227" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1611334274539" />
+    <state width="1238" height="227" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1611346802128" />
     <state width="1238" height="224" key="GridCell.Tab.1.bottom" timestamp="1611088344689">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
