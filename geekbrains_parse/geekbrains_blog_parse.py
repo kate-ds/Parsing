@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import requests
 import bs4
 from urllib.parse import urljoin
-import database
+from geekbrains_parse import database
 
 class GbParse:
     def __init__(self, start_url, db):

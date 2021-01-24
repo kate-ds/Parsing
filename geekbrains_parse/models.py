@@ -39,7 +39,7 @@ class Author(IdMixin, UrlMixin, NameMixin, Base):
     posts = relationship('Post')
 
 
-class Tag(IdMixin, UrlMixin, NameMixin, Base)
+class Tag(IdMixin, UrlMixin, NameMixin, Base):
     __tablename__ = 'tag'
     posts = relationship('Post', secondary=tag_post)
 
