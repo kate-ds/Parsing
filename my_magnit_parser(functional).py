@@ -36,7 +36,8 @@ def get_date(binnary: bin) -> datetime:
         date = product.find('div', class_='card-sale__date').findChildren()[binnary].text[2:].strip()
         return datetime.strptime(f"{date} {datetime.now().year}", "%d %B %Y")
     except:
-        pass
+        date = None
+        return date
 
 def save(data):
     print(data)
