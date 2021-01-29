@@ -1,4 +1,7 @@
 import scrapy
+import os
+import pymongo
+from dotenv import load_dotenv
 from scrapy.http import Response
 
 
@@ -11,8 +14,14 @@ class AutoyoulaSpider(scrapy.Spider):
         'pagination': 'div.Paginator_block__2XAPy a.Paginator_button__u1e7D',
         'ads': 'article.SerpSnippet_snippet__3O1t2 a.SerpSnippet_name__3F7Yu',
     }
-
-
+    load_dotenv(".env")
+    data_base_url = os.getenv('DATA_BASE_URL')
+    data_client = pymongo.MongoClient(data_base_url)
+    data_base = data_client["youla_parse_db"]
+    #
+    # def __init__(self, data_client):
+    #     self.data_client = data_client
+    #     self.data_base = self.data_client["magnit_parse_db"]
 
     @staticmethod
     def get_specs(response):
@@ -25,7 +34,7 @@ class AutoyoulaSpider(scrapy.Spider):
     def data_template(self):
         return {
             'title': lambda response: response.css("div.AdvertCard_advertTitle__1S1Ak::text").get(),
-            'price': lambda response: response.css('div.AdvertCard_price__3dDCr::text').get(),
+            'price': lambda response: float(response.css('div.AdvertCard_price__3dDCr::text').get().replace('\u2009', '')),
             'description': lambda response: response.css('div.AdvertCard_descriptionInner__KnuRi::text').get(),
             'specifications': lambda response: self.get_specs(response),
             'photos': lambda response: self.get_photos(response)
@@ -34,7 +43,9 @@ class AutoyoulaSpider(scrapy.Spider):
     def save(self, data):
         print(data)
         collection = self.data_base["youla"]
-        collection.insert_one(data)
+        result = collection.insert_one(data)
+        if result.inserted_id:
+            print(f"Inserted {result.inserted_id}")
         pass
 
     @staticmethod
@@ -59,7 +70,7 @@ class AutoyoulaSpider(scrapy.Spider):
                 data[name] = value(response)
             except AttributeError:
                 pass
-        return data
+        return self.save(data)
 
 '''
 Собрать след стуркутру и сохранить в БД Монго
