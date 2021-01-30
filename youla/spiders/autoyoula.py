@@ -18,10 +18,6 @@ class AutoyoulaSpider(scrapy.Spider):
     data_base_url = os.getenv('DATA_BASE_URL')
     data_client = pymongo.MongoClient(data_base_url)
     data_base = data_client["youla_parse_db"]
-    #
-    # def __init__(self, data_client):
-    #     self.data_client = data_client
-    #     self.data_base = self.data_client["magnit_parse_db"]
 
     @staticmethod
     def get_specs(response):
