@@ -37,11 +37,13 @@ class AutoyoulaSpider(scrapy.Spider):
     @property
     def data_template(self):
         return {
-            'title': lambda response: response.css("div.AdvertCard_advertTitle__1S1Ak::text").get(),
-            'price': lambda response: float(response.css('div.AdvertCard_price__3dDCr::text').get().replace('\u2009', '')),
-            'description': lambda response: response.css('div.AdvertCard_descriptionInner__KnuRi::text').get(),
+            'url': lambda response: response.url,
+            'title': lambda response: self.get_text(response, "div.AdvertCard_advertTitle__1S1Ak::text"),
+            'price': lambda response:  float(self.get_text(response, 'div.AdvertCard_price__3dDCr::text').replace('\u2009', '')),
+            'description': lambda response: self.get_text(response, 'div.AdvertCard_descriptionInner__KnuRi::text'),
             'specifications': lambda response: self.get_specs(response),
-            'photos': lambda response: self.get_photos(response)
+            'photos': lambda response: self.get_photos(response),
+            'user_or_dealer_url': lambda response: self.get_user_or_dealer_link(response)
         }
 
     def save(self, data):
@@ -57,9 +59,37 @@ class AutoyoulaSpider(scrapy.Spider):
         for link in list_links:
             yield response.follow(link.attrib.get('href'), callback=callback)
 
+    @staticmethod
+    def get_text(response, query):
+        try:
+            return response.css(query).get()
+        except:
+            return None
+
     def get_photos(self, response):
-        regular_expression = r'https:\/\/static.am\/automobile_m3\/document\/xl\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
-        return re.findall(regular_expression, self.get_script(response))
+        try:
+            regex_xl = r'https:\/\/static.am\/automobile_m3\/document\/xl\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
+            regex_l = r'https:\/\/static.am\/automobile_m3\/document\/l\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
+            regex_m = r'https:\/\/static.am\/automobile_m3\/document\/m\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
+            regex_s = r'https:\/\/static.am\/automobile_m3\/document\/s\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
+            list_photos = re.findall(regex_xl, self.get_script(response)) or \
+                          re.findall(regex_l, self.get_script(response)) or \
+                          re.findall(regex_m, self.get_script(response)) or \
+                          re.findall(regex_s, self.get_script(response))
+            return list(set(list_photos))
+        except:
+            return None
+
+    def get_user_or_dealer_link(self, response):
+        try:
+            regex = r'\["youlaId","(.+)","avatar"'
+            user_id = re.findall(regex, self.get_script(response))
+            # return youla_url + ''.join(user_id)
+            return f"https://youla.ru/user/{user_id[0]}"
+        except IndexError:
+            regex = r'"sellerLink","(.+)","type"'
+            dealer_name = re.findall(regex, self.get_script(response))
+            return f"https://auto.youla.ru{dealer_name[0]}"
 
     def parse(self, response: Response, **kwargs):
         yield from self.gen_task(response, response.css(self.css_query['brand']), self.brand_parse)
@@ -76,13 +106,3 @@ class AutoyoulaSpider(scrapy.Spider):
             except AttributeError:
                 pass
         return self.save(data)
-
-'''
-Собрать след стуркутру и сохранить в БД Монго
-Название объявления
-Список фото объявления (ссылки)
-Список характеристик
-Описание объявления
-ссылка на автора объявления
-дополнительно попробуйте вытащить телефона
-'''
