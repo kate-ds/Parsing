@@ -1,8 +1,10 @@
 import scrapy
 import os
 import pymongo
+import re
 from dotenv import load_dotenv
 from scrapy.http import Response
+from urllib.parse import unquote
 
 
 class AutoyoulaSpider(scrapy.Spider):
@@ -25,6 +27,12 @@ class AutoyoulaSpider(scrapy.Spider):
                 spec.css('.AdvertSpecs_label__2JHnS::text').get():
                     spec.css('.AdvertSpecs_data__xK2Qx::text').get() or spec.css('a::text').get() for spec in response.css('.AdvertSpecs_row__ljPcX')
             }
+
+    @staticmethod
+    def get_script(response):
+        script_text = response.css('script::text').re_first(r'^window.transitState.*')
+        return unquote(script_text[42:-3])
+
 
     @property
     def data_template(self):
@@ -50,7 +58,8 @@ class AutoyoulaSpider(scrapy.Spider):
             yield response.follow(link.attrib.get('href'), callback=callback)
 
     def get_photos(self, response):
-        return [pict.attrib.get('src') for pict in response.css('figure.PhotoGallery_photo__36e_r img')]
+        regular_expression = r'https:\/\/static.am\/automobile_m3\/document\/xl\/[a-z0-9]*\/[a-z0-9]*\/[a-z0-9.]*'
+        return re.findall(regular_expression, self.get_script(response))
 
     def parse(self, response: Response, **kwargs):
         yield from self.gen_task(response, response.css(self.css_query['brand']), self.brand_parse)
