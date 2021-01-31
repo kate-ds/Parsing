@@ -5,6 +5,7 @@ import re
 from dotenv import load_dotenv
 from scrapy.http import Response
 from urllib.parse import unquote
+from scrapy_splash import SplashRequest
 
 
 class AutoyoulaSpider(scrapy.Spider):
@@ -16,6 +17,14 @@ class AutoyoulaSpider(scrapy.Spider):
         'pagination': 'div.Paginator_block__2XAPy a.Paginator_button__u1e7D',
         'ads': 'article.SerpSnippet_snippet__3O1t2 a.SerpSnippet_name__3F7Yu',
     }
+    get_phone_script = '''
+                function main(splash, args)
+                    assert(splash:go(args.url))
+                    assert(splash:runjs('document.querySelector(".Button_button__3NYks").click()'))
+                    assert(splash:wait(3.0))
+                    local phone = assert(splash:select('.PopupPhoneNumber_number__1hybY'))
+                    return phone.node.text
+    end'''
     load_dotenv(".env")
     data_base_url = os.getenv('DATA_BASE_URL')
     data_client = pymongo.MongoClient(data_base_url)
@@ -24,26 +33,28 @@ class AutoyoulaSpider(scrapy.Spider):
     @staticmethod
     def get_specs(response):
         return {
-                spec.css('.AdvertSpecs_label__2JHnS::text').get():
-                    spec.css('.AdvertSpecs_data__xK2Qx::text').get() or spec.css('a::text').get() for spec in response.css('.AdvertSpecs_row__ljPcX')
-            }
+            spec.css('.AdvertSpecs_label__2JHnS::text').get():
+                spec.css('.AdvertSpecs_data__xK2Qx::text').get() or spec.css('a::text').get() for spec in
+            response.css('.AdvertSpecs_row__ljPcX')
+        }
 
     @staticmethod
     def get_script(response):
         script_text = response.css('script::text').re_first(r'^window.transitState.*')
         return unquote(script_text[42:-3])
 
-
     @property
     def data_template(self):
         return {
             'url': lambda response: response.url,
             'title': lambda response: self.get_text(response, "div.AdvertCard_advertTitle__1S1Ak::text"),
-            'price': lambda response:  float(self.get_text(response, 'div.AdvertCard_price__3dDCr::text').replace('\u2009', '')),
+            'price': lambda response: float(
+                self.get_text(response, 'div.AdvertCard_price__3dDCr::text').replace('\u2009', '')),
             'description': lambda response: self.get_text(response, 'div.AdvertCard_descriptionInner__KnuRi::text'),
             'specifications': lambda response: self.get_specs(response),
             'photos': lambda response: self.get_photos(response),
-            'user_or_dealer_url': lambda response: self.get_user_or_dealer_link(response)
+            'user_or_dealer_url': lambda response: self.get_user_or_dealer_link(response),
+            'phone' : lambda response: self.get_phone(response)
         }
 
     def save(self, data):
@@ -94,6 +105,13 @@ class AutoyoulaSpider(scrapy.Spider):
     def brand_parse(self, response: Response):
         yield from self.gen_task(response, response.css(self.css_query['pagination']), self.brand_parse)
         yield from self.gen_task(response, response.css(self.css_query['ads']), self.ads_parse)
+
+    def get_phone(self, response: Response):
+        try:
+            return SplashRequest(response.url, args={'wait': 0.5, 'lua_source': self.get_phone_script})
+        except:
+            return None
+
 
     def ads_parse(self, response: Response):
         data = {}

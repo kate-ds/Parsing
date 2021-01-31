@@ -89,3 +89,17 @@ DEFAULT_REQUEST_HEADERS = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Scrapy-splash settings
+
+DOWNLOADER_MIDDLEWARES = {
+  'scrapy_splash.SplashCookiesMiddleware': 723,
+  'scrapy_splash.SplashMiddleware': 725,
+  'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+SPLASH_URL = 'http://localhost:8050/'
+
+SPIDER_MIDDLEWARES = {
+  'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
