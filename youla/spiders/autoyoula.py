@@ -82,13 +82,10 @@ class AutoyoulaSpider(scrapy.Spider):
 
     def get_user_or_dealer_link(self, response):
         try:
-            regex = r'\["youlaId","(.+)","avatar"'
-            user_id = re.findall(regex, self.get_script(response))
-            # return youla_url + ''.join(user_id)
+            user_id = re.findall(r'\["youlaId","(.+)","avatar"', self.get_script(response))
             return f"https://youla.ru/user/{user_id[0]}"
         except IndexError:
-            regex = r'"sellerLink","(.+)","type"'
-            dealer_name = re.findall(regex, self.get_script(response))
+            dealer_name = re.findall(r'"sellerLink","(.+)","type"', self.get_script(response))
             return f"https://auto.youla.ru{dealer_name[0]}"
 
     def parse(self, response: Response, **kwargs):
