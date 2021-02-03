@@ -25,10 +25,6 @@ class AutoyoulaSpider(scrapy.Spider):
                     local phone = assert(splash:select('.PopupPhoneNumber_number__1hybY'))
                     return phone.node.text
     end'''
-    load_dotenv(".env")
-    data_base_url = os.getenv('DATA_BASE_URL')
-    data_client = pymongo.MongoClient(data_base_url)
-    data_base = data_client["youla_parse_db"]
 
     @staticmethod
     def get_specs(response):
@@ -57,9 +53,14 @@ class AutoyoulaSpider(scrapy.Spider):
             'phone' : lambda response: self.get_phone(response)
         }
 
-    def save(self, data):
+    @staticmethod
+    def save(data):
         print(data)
-        collection = self.data_base["youla"]
+        load_dotenv("\.env")
+        data_base_url = os.getenv('DATA_BASE_URL')
+        data_client = pymongo.MongoClient(data_base_url)
+        data_base = data_client["youla_parse_db"]
+        collection = data_base["youla"]
         result = collection.insert_one(data)
         if result.inserted_id:
             print(f"Inserted {result.inserted_id}")
@@ -103,6 +104,11 @@ class AutoyoulaSpider(scrapy.Spider):
         yield from self.gen_task(response, response.css(self.css_query['brand']), self.brand_parse)
 
     def brand_parse(self, response: Response):
+        ''' (the same pagination)
+        for page in response.css('div.Paginator_block__2XAPy a.Paginator_button__u1e7D'):
+            list_links = page.attrib.get('href')
+            yield response.follow(list_links, callback=self.brand_parse)
+        '''
         yield from self.gen_task(response, response.css(self.css_query['pagination']), self.brand_parse)
         yield from self.gen_task(response, response.css(self.css_query['ads']), self.ads_parse)
 
