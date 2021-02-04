@@ -76,7 +76,6 @@ class VacanciesHhSpider(scrapy.Spider):
         yield response.follow(self.get_link(response, 'company_link'), callback=self.company_parse)
 
     def company_parse(self, response: Response):
-        print(1)
         data = {}
         for name, value in self.get_company_data.items():
             data[name] = value(response)
