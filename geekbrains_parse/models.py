@@ -34,6 +34,7 @@ class Post(IdMixin, UrlMixin, Base):
     author_id = Column(Integer, ForeignKey("author.id"))
     author = relationship("Author")
     tags = relationship("Tag", secondary=tag_post)
+    comments = relationship('Comment')
 
 
 class Comment(IdMixin, Base):
@@ -41,6 +42,7 @@ class Comment(IdMixin, Base):
     text = Column(String, nullable=False)
     full_name = Column(String, nullable=False)
     post_id = Column(Integer, ForeignKey("post.id"))
+    url = Column(String, unique=False, nullable=False)
     post = relationship("Post")
 
 

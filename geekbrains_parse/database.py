@@ -25,11 +25,12 @@ class Database:
         tags = map(
             lambda tag_data: self.get_or_create(session, models.Tag, **tag_data), data["tags"]
         )
-
-        # comments = map(lambda comments_data: self.get_or_create(session, models.Comment, **comments_data),
-        #                data["comments"])
+        comments = map(
+            lambda comments_data: self.get_or_create(session, models.Comment, **comments_data), data["comments"]
+        )
 
         post.tags.extend(tags)
+        post.comments.extend(comments)
         session.add(post)
         # session.add(comments)
         try:

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7e999242-cbd7-4cfd-a0d3-18021737857e" name="Default Changelist" comment="" />
+    <list default="true" id="7e999242-cbd7-4cfd-a0d3-18021737857e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/hh-scrapy/hhru/spiders/vacancies_hh.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geekbrains_parse/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/geekbrains_parse/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geekbrains_parse/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/geekbrains_parse/models.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -157,9 +162,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.geekbrains_blog_parse" />
       <item itemvalue="Python.kinipoisk" />
       <item itemvalue="Python.pymongo" />
-      <item itemvalue="Python.geekbrains_blog_parse" />
     </list>
     <recent_temporary>
       <list>
@@ -367,11 +372,9 @@
     <state x="379" y="105" key="git4idea.branch.GitSmartOperationDialog/0.23.1280.726@0.23.1280.726" timestamp="1611130634428" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Parsing$pymongo.coverage" NAME="pymongo Coverage Results" MODIFIED="1611334274526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Parsing$parse_magnit.coverage" NAME="parse_magnit Coverage Results" MODIFIED="1611269322266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Parsing$1__1_.coverage" NAME="1 (1) Coverage Results" MODIFIED="1611310146540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Parsing$geekbrains_blog_parse.coverage" NAME="geekbrains_blog_parse Coverage Results" MODIFIED="1611486572240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
-    <SUITE FILE_PATH="coverage/Parsing$1.coverage" NAME="1 Coverage Results" MODIFIED="1611262511875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Parsing$parse2_magnit.coverage" NAME="parse2_magnit Coverage Results" MODIFIED="1611169064973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Parsing$youla.coverage" NAME="youla Coverage Results" MODIFIED="1611927156251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Parsing$resp.coverage" NAME="resp Coverage Results" MODIFIED="1611944179639" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/youla" />
+    <SUITE FILE_PATH="coverage/Parsing$main.coverage" NAME="main Coverage Results" MODIFIED="1612393970517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/Parsing$autoyoula.coverage" NAME="autoyoula Coverage Results" MODIFIED="1612393680553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/youla/spiders" />
   </component>
 </project>
