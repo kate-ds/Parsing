@@ -64,9 +64,10 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'hhru.pipelines.HhruPipeline': 300,
-#}
+ITEM_PIPELINES = {
+  'hhru.pipelines.HhruPipeline': 100,
+  'hhru.pipelines.SaveToMongoPipeline': 300
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
