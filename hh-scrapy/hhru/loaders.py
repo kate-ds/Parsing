@@ -27,11 +27,6 @@ class HhruVacancyLoader(ItemLoader):
     company_link_in = Compose(TakeFirst(), get_link)
     company_link_out = TakeFirst()
 
-
-
-    # 'company_description': lambda response: self.get_text(response, self.companies_data_query['company_description'])
-
-
 class HHruCompanyLoader(ItemLoader):
     default_item_class = HhruCompanyItem
     company_link_out = TakeFirst()
@@ -41,5 +36,3 @@ class HHruCompanyLoader(ItemLoader):
     activity_areas_in = MapCompose(clear_unicode)
     company_description_in = Compose(get_text, clear_unicode)
     company_description_out = TakeFirst()
-
-
