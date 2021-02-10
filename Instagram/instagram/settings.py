@@ -33,7 +33,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 16
 CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-# COOKIES_ENABLED = True
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 TELNETCONSOLE_ENABLED = False
@@ -64,9 +64,13 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'instagram.pipelines.InstagramPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'instagram.instagram.pipelines.InstagramPipeline': 100,
+  'instagram.instagram.pipelines.SaveToMongoPipeline': 400,
+  'instagram.instagram.pipelines.InstaImagesPipeline': 300
+}
+
+IMAGES_STORE = 'instagram.images'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -79,7 +83,7 @@ AUTOTHROTTLE_MAX_DELAY = 10
 # each remote server
 AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG = False
+AUTOTHROTTLE_DEBUG = True
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
