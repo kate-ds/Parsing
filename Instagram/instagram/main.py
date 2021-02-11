@@ -6,7 +6,6 @@ from pathlib import Path
 import os
 
 if __name__ == '__main__':
-    # load_dotenv('instagram.instagram.env')
     load_dotenv(Path(__file__).parent.joinpath(".env"))
     crawler_settings = Settings()
     crawler_settings.setmodule('settings')
