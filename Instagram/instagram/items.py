@@ -19,6 +19,17 @@ class InstagramPostItem(scrapy.Item):
     data = scrapy.Field()
     images = scrapy.Field()
 
+class InstagramUserFollowers(scrapy.Item):
+    _id = scrapy.Field()
+    date_parse = scrapy.Field(required=True)
+    user_name = scrapy.Field()
+    user_id = scrapy.Field()
+    user_data = scrapy.Field()
+    images = scrapy.Field()
+    followers_data = scrapy.Field()
+    following_data = scrapy.Field()
+
+
 
 
 

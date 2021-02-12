@@ -28,12 +28,17 @@ class SaveToMongoPipeline:
 
 class InstaImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        yield Request(item['images'])
-        return item
+        try:
+            yield Request(item['images'])
+            return item
+        except KeyError:
+            pass
 
     def item_completed(self, results, item, info):
         if results:
             item["images"] = results[0][1]
         return item
+
+
 
 
