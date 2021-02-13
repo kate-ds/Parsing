@@ -179,7 +179,7 @@ class InstaSpider(scrapy.Spider):
             yield from self.get_full_data(user_data)
 
     def get_full_data(self, user_data):
-        self.database_collection = "Posts"
+        self.database_collection = "Users"
         if (len(self.user_followers_data[user_data['username']]) == user_data['edge_followed_by']['count']) and (
                 len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']):
             yield InstagramUserFollowers(
