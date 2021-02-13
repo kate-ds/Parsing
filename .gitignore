@@ -130,3 +130,7 @@ dmypy.json
 .pyre/
 tmp/
 parse_venv/
+.idea/
+*.zip
+.DS_Store
+

@@ -10,20 +10,22 @@ class InstaSpider(scrapy.Spider):
     start_urls = ["https://www.instagram.com/"]
     login_url = 'https://www.instagram.com/accounts/login/ajax/'
     followers_data = {}
-    user_data = {}
+    user_followers_data = {}
+    user_follow_data = {}
     current_tag = ""
     database_collection = ""
     hash = {
         'pagination': '9b498c08113f1e09617a1703c22b2f32',
         'post': '2c4c2e343a8f64c625ba02b2aa12c7f8',
-        'user_followers': '5aefa9893005572d237da5068082d8d5'
+        'user_followers': '5aefa9893005572d237da5068082d8d5',
+        'user_followings': '3dec7e2c57367ef3da3d987d89f9dbc8'
     }
 
     def __init__(self, login, password, *args, **kwargs):
         self.login = login
         self.password = password
-        self.tags = []        # ['annecy', 'montpellier', 'travelinspiration']
-        self.users = ['s_katrinka']
+        self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
+        self.users = ['s_katrinka', 'goodwin1468', 'pushkariova22']
         super().__init__(*args, **kwargs)
 
     def parse(self, response, *args, **kwargs):
@@ -43,43 +45,10 @@ class InstaSpider(scrapy.Spider):
             elif response.json().get('authenticated') and self.users != []:
                 yield from self.parse_task_users(response)
 
-
     def parse_task_tags(self, response):
         for tag in self.tags:
             self.current_tag = tag
             yield response.follow(f'/explore/tags/{tag}/', callback=self.tag_parse)
-
-    # def user_parse(self, response, end_cursor=None):
-    #     user_data = self.get_user(response)
-    #     self.user_data = user_data
-    #     variables = {"id": user_data['id'],
-    #                  "first": 50}
-    #     if end_cursor:
-    #         variables["after"] = end_cursor
-    #     url = f"/graphql/query/?query_hash={self.hash['user_followers']}&variables={json.dumps(variables)}"
-    #     yield response.follow(url, callback=self.followers_parse)
-
-    # def followers_parse(self, response):
-    #     followers_data = response.json()['data']['user']['edge_followed_by']['edges']
-    #     page_info = response.json()['data']['user']['edge_followed_by']['page_info']
-    #     for follower in followers_data:
-    #         self.followers_data[follower['node']['username']] = follower['node']
-    #     if page_info['has_next_page']:
-    #         end_cursor = page_info['end_cursor']
-    #         yield from self.user_parse(response, end_cursor)
-    #     else:
-    #         print(1)
-    #         self.user_data = {}
-    #     print(1)
-
-
-
-    def get_user(self, response):
-        try:
-            return self.js_data_extractor(response)['entry_data']['ProfilePage'][0]['graphql']['user']
-        except AttributeError:
-            return self.user_data
-            print(1)
 
     def js_data_extractor(self, response) -> dict:
         '''
@@ -120,12 +89,12 @@ class InstaSpider(scrapy.Spider):
         try:
             page_data = self.js_data_extractor(response)['entry_data']['TagPage'][0]['graphql']['hashtag']
             yield InstagramTagItem(
-                date_parse = datetime.now(),
-                data = {'id' : page_data['id'],
-                        'name': page_data['name'],
-                        'profile_pic_url': page_data['profile_pic_url'],
-                        'post_counts' : page_data['edge_hashtag_to_media']['count']},
-                images = page_data['profile_pic_url'])
+                date_parse=datetime.now(),
+                data={'id': page_data['id'],
+                      'name': page_data['name'],
+                      'profile_pic_url': page_data['profile_pic_url'],
+                      'post_counts': page_data['edge_hashtag_to_media']['count']},
+                images=page_data['profile_pic_url'])
             posts = self.get_photos_data(self.js_data_extractor(response))
         except AttributeError:
             posts = self.get_photos_data(response.json())
@@ -143,55 +112,85 @@ class InstaSpider(scrapy.Spider):
             # to to post page and return to
             yield response.follow(url, callback=self.tag_parse)
 
-
-
     def post_parse(self, response):
         self.database_collection = "Posts"
         post_data = response.json()['data']['shortcode_media']
         yield InstagramPostItem(
-            tag_name = self.current_tag,
-            date_parse = datetime.now(),
-            data = post_data,
-            images = post_data['display_url'])
+            tag_name=self.current_tag,
+            date_parse=datetime.now(),
+            data=post_data,
+            images=post_data['display_url'])
 
-
-# ----------- followers-----------------------------
+    # ---------------------------------------User Followers and Follow---------------------------------------------
 
     def parse_task_users(self, response):
         for user in self.users:
-            yield response.follow(f'/{user}/', callback=self.user_data, cb_kwargs={"user": user})
+            yield response.follow(f'/{user}/', callback=self.user_page_parse)
 
-    def user_data(self, response, user):
-            print(1)
-            self.database_collection = 'Users'
-            user_data = self.get_user(response)
-            followers_data = self.get_followers(response, user_data['id'])
-            yield InstagramUserFollowers(
-                date_parse=datetime.now(),
-                user_name=user,
-                user_id=user_data['id'],
-                user_data=user_data,
-                images=user_data['profile_pic_url_hd'],
-                followers_data=followers_data,
-                following_data={}
-            )
+    def user_page_parse(self, response):
+        user_data = self.js_data_extractor(response)['entry_data']['ProfilePage'][0]['graphql']['user']
+        yield from self.followers_api_parse(response, user_data)
+        yield from self.follow_api_parse(response, user_data)
 
-    def get_followers(self, response, id, end_cursor=None):
-        print(1)
-        variables = {"id": id,
+    def followers_api_parse(self, response, user_data, end_cursor=None):
+        variables = {"id": user_data['id'],
                      "first": 50}
-        if end_cursor == None:
-            followers_dict = {}
-        else:
+        if end_cursor:
             variables["after"] = end_cursor
         url = f"/graphql/query/?query_hash={self.hash['user_followers']}&variables={json.dumps(variables)}"
-        data = response.follow(url)
-        followers = data.json()['data']['user']['edge_followed_by']['edges']
-        page_info = data.json()['data']['user']['edge_followed_by']['page_info']
-        for follower in followers:
-            followers_dict[follower['node']['username']] = follower['node']
-        if page_info['has_next_page']:
-            end_cursor = page_info['end_cursor']
-            self.get_followers(response, id, end_cursor)
+        yield response.follow(url, callback=self.get_followers_data, cb_kwargs={"user_data": user_data})
+
+    def get_followers_data(self, response,
+                           user_data):
+        followers_data = response.json()['data']['user']['edge_followed_by']['edges']
+        page_data = response.json()['data']['user']['edge_followed_by']['page_info']
+        if not user_data['username'] in self.user_followers_data:
+            self.user_followers_data[user_data['username']] = {}
+
+        for follower in followers_data:
+            self.user_followers_data[user_data['username']][follower['node']['id']] = {}
+            self.user_followers_data[user_data['username']][follower['node']['id']] = follower['node']
+        if page_data['has_next_page']:
+            yield from self.followers_api_parse(response, user_data, page_data['end_cursor'])
         else:
-            return followers_dict
+            yield from self.get_full_data(user_data)
+
+    def follow_api_parse(self, response, user_data, end_cursor=None):
+        variables = {"id": user_data['id'],
+                     "first": 50}
+        if end_cursor:
+            variables["after"] = end_cursor
+        url = f"/graphql/query/?query_hash={self.hash['user_followings']}&variables={json.dumps(variables)}"
+        yield response.follow(url, callback=self.get_follow_data, cb_kwargs={"user_data": user_data})
+
+    def get_follow_data(self, response,
+                            user_data):
+        followings_data = response.json()['data']['user']['edge_follow']['edges']
+        page_data = response.json()['data']['user']['edge_follow']['page_info']
+        if not user_data['username'] in self.user_follow_data:
+            self.user_follow_data[user_data['username']] = {}
+
+        for follow in followings_data:
+            self.user_follow_data[user_data['username']][follow['node']['id']] = {}
+            self.user_follow_data[user_data['username']][follow['node']['id']] = follow['node']
+        if page_data['has_next_page']:
+            yield from self.follow_api_parse(response, user_data, page_data['end_cursor'])
+        else:
+            yield from self.get_full_data(user_data)
+
+    def get_full_data(self, user_data):
+        self.database_collection = "Posts"
+        if (len(self.user_followers_data[user_data['username']]) == user_data['edge_followed_by']['count']) and (
+                len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']):
+            yield InstagramUserFollowers(
+                date_parse=datetime.now(),
+                user_name=user_data['username'],
+                user_id=user_data['id'],
+                user_data=user_data,
+                followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
+                follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
+            )
+            self.user_follow_data[user_data['username']] = {}
+            self.user_followers_data[user_data['username']] = {}
+        else:
+            pass

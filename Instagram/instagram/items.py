@@ -27,7 +27,7 @@ class InstagramUserFollowers(scrapy.Item):
     user_data = scrapy.Field()
     images = scrapy.Field()
     followers_data = scrapy.Field()
-    following_data = scrapy.Field()
+    follow_data = scrapy.Field()
 
 
 
