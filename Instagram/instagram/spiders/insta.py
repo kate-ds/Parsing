@@ -25,7 +25,7 @@ class InstaSpider(scrapy.Spider):
         self.login = login
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
-        self.users = ['s_katrinka', 'goodwin1468', 'pushkariova22']
+        self.users = ['s_katrinka', 'pwpav', 'daria_burceva']
         super().__init__(*args, **kwargs)
 
     def parse(self, response, *args, **kwargs):
@@ -130,7 +130,6 @@ class InstaSpider(scrapy.Spider):
     def user_page_parse(self, response):
         user_data = self.js_data_extractor(response)['entry_data']['ProfilePage'][0]['graphql']['user']
         yield from self.followers_api_parse(response, user_data)
-        yield from self.follow_api_parse(response, user_data)
 
     def followers_api_parse(self, response, user_data, end_cursor=None):
         variables = {"id": user_data['id'],
@@ -149,22 +148,23 @@ class InstaSpider(scrapy.Spider):
 
         for follower in followers_data:
             self.user_followers_data[user_data['username']][follower['node']['id']] = {}
-            self.user_followers_data[user_data['username']][follower['node']['id']] = follower['node']
+            self.user_followers_data[user_data['username']][follower['node']['id']] = follower['node']['username']
         if page_data['has_next_page']:
             yield from self.followers_api_parse(response, user_data, page_data['end_cursor'])
         else:
-            yield from self.get_full_data(user_data)
+            if len(self.user_followers_data[user_data['username']]) == user_data['edge_followed_by']['count']:
+                yield from self.follow_api_parse(response, user_data)
 
     def follow_api_parse(self, response, user_data, end_cursor=None):
         variables = {"id": user_data['id'],
-                     "first": 50}
+                     "first": 100}
         if end_cursor:
             variables["after"] = end_cursor
         url = f"/graphql/query/?query_hash={self.hash['user_followings']}&variables={json.dumps(variables)}"
         yield response.follow(url, callback=self.get_follow_data, cb_kwargs={"user_data": user_data})
 
     def get_follow_data(self, response,
-                            user_data):
+                        user_data):
         followings_data = response.json()['data']['user']['edge_follow']['edges']
         page_data = response.json()['data']['user']['edge_follow']['page_info']
         if not user_data['username'] in self.user_follow_data:
@@ -172,25 +172,21 @@ class InstaSpider(scrapy.Spider):
 
         for follow in followings_data:
             self.user_follow_data[user_data['username']][follow['node']['id']] = {}
-            self.user_follow_data[user_data['username']][follow['node']['id']] = follow['node']
+            self.user_follow_data[user_data['username']][follow['node']['id']] = follow['node']['username']
         if page_data['has_next_page']:
             yield from self.follow_api_parse(response, user_data, page_data['end_cursor'])
         else:
-            yield from self.get_full_data(user_data)
+            if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
+                yield from self.get_full_data(user_data)
 
     def get_full_data(self, user_data):
         self.database_collection = "Users"
-        if (len(self.user_followers_data[user_data['username']]) == user_data['edge_followed_by']['count']) and (
-                len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']):
-            yield InstagramUserFollowers(
-                date_parse=datetime.now(),
-                user_name=user_data['username'],
-                user_id=user_data['id'],
-                user_data=user_data,
-                followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
-                follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
-            )
-            self.user_follow_data[user_data['username']] = {}
-            self.user_followers_data[user_data['username']] = {}
-        else:
-            pass
+        yield InstagramUserFollowers(
+            date_parse=datetime.now(),
+            user_name=user_data['username'],
+            user_id=user_data['id'],
+            user_data=user_data['full_name'],
+            followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
+            follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
+        )
+
