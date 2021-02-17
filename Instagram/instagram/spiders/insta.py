@@ -12,6 +12,7 @@ class InstaSpider(scrapy.Spider):
     followers_data = {}
     user_followers_data = {}
     user_follow_data = {}
+    connections = {}
     current_tag = ""
     database_collection = ""
     hash = {
@@ -25,7 +26,9 @@ class InstaSpider(scrapy.Spider):
         self.login = login
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
-        self.users = ['s_katrinka', 'pwpav', 'daria_burceva']
+        self.users = ['s_katrinka']
+        self.user2 = 'vitaly.sokolov'
+
         super().__init__(*args, **kwargs)
 
     def parse(self, response, *args, **kwargs):
@@ -121,7 +124,7 @@ class InstaSpider(scrapy.Spider):
             data=post_data,
             images=post_data['display_url'])
 
-    # ---------------------------------------User Followers and Follow---------------------------------------------
+    # --------------------------------------- User Followers and Follow ---------------------------------------------
 
     def parse_task_users(self, response):
         for user in self.users:
@@ -179,14 +182,55 @@ class InstaSpider(scrapy.Spider):
             if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
                 yield from self.get_full_data(user_data)
 
+
     def get_full_data(self, user_data):
-        self.database_collection = "Users"
-        yield InstagramUserFollowers(
-            date_parse=datetime.now(),
-            user_name=user_data['username'],
-            user_id=user_data['id'],
-            user_data=user_data['full_name'],
-            followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
-            follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
-        )
+        # self.database_collection = "Users"
+        # yield InstagramUserFollowers(
+        #     date_parse=datetime.now(),
+        #     user_name=user_data['username'],
+        #     user_id=user_data['id'],
+        #     user_data=user_data['full_name'],
+        #     followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
+        #     follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
+        # )
+        yield from self.get_friends(user_data)
+
+# --------------------------------------- User Friends Connections ---------------------------------------------
+
+    def get_friends(self, user_data):
+        follow =  self.user_follow_data[user_data['username']].values()
+        followers = self.user_followers_data[user_data['username']].values()
+        friend_list = list(set(follow) & set(followers))
+        yield from self.check_friendship(user_data, friend_list)
+
+    def save_connections(self, user_data, friend_list):
+        '''
+        метод, который сохраняет все связи в единую структуру
+        @param user_data:
+        @param friend_list:
+        @return:
+        '''
+        pass
+
+    def check_friendship(self, user_data, friend_list):
+        '''
+        метод, который проверяет, есть ли пользователь2 в существующих связях
+        @param self:
+        @param user_data: данные текущего пользователя
+        @param friend_list: список пользователей
+        @return: перенаправлет данные в зависимости от выполнения условия
+        '''
+        self.connections[user_data['username']] = friend_list
+        if  self.user2 in friend_list:
+            print("Вернуть в метод, который найдет ключи")
+        else:
+            print('вернуть лист на парсинг юзеров')
+
+    def get_connections(self):
+        '''
+        @return: будет добывать родительские элементы словаря и выводить их
+        '''
+        pass
+
+
 
