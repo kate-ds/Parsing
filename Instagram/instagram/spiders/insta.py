@@ -180,39 +180,43 @@ class InstaSpider(scrapy.Spider):
             yield from self.follow_api_parse(response, user_data, page_data['end_cursor'])
         else:
             if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
-                yield from self.get_full_data(user_data)
+                # yield from self.get_full_data(user_data)
+                yield from self.get_friends(user_data, response)
 
 
-    def get_full_data(self, user_data):
-        # self.database_collection = "Users"
-        # yield InstagramUserFollowers(
-        #     date_parse=datetime.now(),
-        #     user_name=user_data['username'],
-        #     user_id=user_data['id'],
-        #     user_data=user_data['full_name'],
-        #     followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
-        #     follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
-        # )
-        yield from self.get_friends(user_data)
+    # def get_full_data(self, user_data):
+    #     self.database_collection = "Users"
+    #     yield InstagramUserFollowers(
+    #         date_parse=datetime.now(),
+    #         user_name=user_data['username'],
+    #         user_id=user_data['id'],
+    #         user_data=user_data['full_name'],
+    #         followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
+    #         follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
+    #     )
+
 
 # --------------------------------------- User Friends Connections ---------------------------------------------
+# ----------------------------------------Еще дописываю
 
-    def get_friends(self, user_data):
+    def get_friends(self, response, user_data):
         follow =  self.user_follow_data[user_data['username']].values()
         followers = self.user_followers_data[user_data['username']].values()
         friend_list = list(set(follow) & set(followers))
-        yield from self.check_friendship(user_data, friend_list)
+        yield from self.save_connections(response, user_data, friend_list)
 
-    def save_connections(self, user_data, friend_list):
+
+    def save_connections(self, response, user_data, friend_list):
         '''
         метод, который сохраняет все связи в единую структуру
         @param user_data:
         @param friend_list:
         @return:
         '''
-        pass
+        self.connections[user_data['username']] = friend_list
+        yield from self.check_friendship(response, user_data, friend_list)
 
-    def check_friendship(self, user_data, friend_list):
+    def check_friendship(self, response, user_data, friend_list):
         '''
         метод, который проверяет, есть ли пользователь2 в существующих связях
         @param self:
@@ -220,11 +224,14 @@ class InstaSpider(scrapy.Spider):
         @param friend_list: список пользователей
         @return: перенаправлет данные в зависимости от выполнения условия
         '''
-        self.connections[user_data['username']] = friend_list
+        
         if  self.user2 in friend_list:
             print("Вернуть в метод, который найдет ключи")
+            yield from self.get_connections()
         else:
+            self.users = friend_list
             print('вернуть лист на парсинг юзеров')
+            yield from self.parse_task_users(response)
 
     def get_connections(self):
         '''
