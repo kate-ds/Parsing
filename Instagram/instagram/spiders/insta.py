@@ -13,7 +13,6 @@ class InstaSpider(scrapy.Spider):
     user_followers_data = {}
     user_follow_data = {}
     connections = []
-    connection = 'Connection : '
     current_tag = ""
     database_collection = ""
     hash = {
@@ -28,7 +27,8 @@ class InstaSpider(scrapy.Spider):
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
         self.users = ['s_katrinka']
-        self.user2 = 'aev0103'
+        self.user2 = 'ubaldosv'
+        self.connection = f"Connection : {self.user2}"
         self.tasks = []
 
         super().__init__(*args, **kwargs)
@@ -182,26 +182,23 @@ class InstaSpider(scrapy.Spider):
             yield from self.follow_api_parse(response, user_data, page_data['end_cursor'])
         else:
             if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
-                # yield from self.get_full_data(user_data)
+                yield from self.get_full_data(user_data)
                 yield from self.get_friends(response, user_data)
 
 
-    # def get_full_data(self, user_data):
-    #     self.database_collection = "Users"
-    #     yield InstagramUserFollowers(
-    #         date_parse=datetime.now(),
-    #         user_name=user_data['username'],
-    #         user_id=user_data['id'],
-    #         user_data=user_data['full_name'],
-    #         followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
-    #         follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
-    #     )
+    def get_full_data(self, user_data):
+        self.database_collection = "Users"
+        yield InstagramUserFollowers(
+            date_parse=datetime.now(),
+            user_name=user_data['username'],
+            user_id=user_data['id'],
+            user_data=user_data['full_name'],
+            followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
+            follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
+        )
 
 
 # --------------------------------------- User Friends Connections ---------------------------------------------
-# ----------------------------------------Еще дописываю
-
-    # TODO input asking start names and asking if users will be saved in db
 
     def get_friends(self, response, user_data) -> set:
         '''
@@ -252,7 +249,7 @@ class InstaSpider(scrapy.Spider):
             if user['friend'] == name:
                 self.connection += ' - ' + str(user['of_user'])
                 yield from self.get_connections(user['of_user'])
-        print('Found!\n', self.connections)
+        print('Found!\n', self.connection)
 
 
 
