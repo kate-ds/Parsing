@@ -12,7 +12,7 @@ class InstaSpider(scrapy.Spider):
     followers_data = {}
     user_followers_data = {}
     user_follow_data = {}
-    connections = {}
+    connections = []
     current_tag = ""
     database_collection = ""
     hash = {
@@ -27,7 +27,8 @@ class InstaSpider(scrapy.Spider):
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
         self.users = ['s_katrinka']
-        self.user2 = 'vitaly.sokolov'
+        self.user2 = 'alena_fitol'
+        self.tasks = []
 
         super().__init__(*args, **kwargs)
 
@@ -181,7 +182,7 @@ class InstaSpider(scrapy.Spider):
         else:
             if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
                 # yield from self.get_full_data(user_data)
-                yield from self.get_friends(user_data, response)
+                yield from self.get_friends(response, user_data)
 
 
     # def get_full_data(self, user_data):
@@ -199,41 +200,52 @@ class InstaSpider(scrapy.Spider):
 # --------------------------------------- User Friends Connections ---------------------------------------------
 # ----------------------------------------Еще дописываю
 
-    def get_friends(self, response, user_data):
+    # TODO input asking start names and asking if users will be saved in db
+
+    def get_friends(self, response, user_data) -> set:
+        '''
+        Метод из полученных данных будет делать лист друзей (взаимные подписки)
+        @return: set of friends
+        '''
         follow =  self.user_follow_data[user_data['username']].values()
         followers = self.user_followers_data[user_data['username']].values()
-        friend_list = list(set(follow) & set(followers))
-        yield from self.save_connections(response, user_data, friend_list)
+        friend_set = set(follow) & set(followers)
+        yield from self.save_connections(response, user_data, friend_set)
 
+    def get_unique_tasks(self, response, user_data, friend_set) -> set:
+        '''
+        Метод будет проверять уникальность пользователя, чтобы он не попал на парсинг повторно
+        @return: set of unique users
+        '''
+        for friend in friend_set:
 
-    def save_connections(self, response, user_data, friend_list):
-        '''
-        метод, который сохраняет все связи в единую структуру
-        @param user_data:
-        @param friend_list:
-        @return:
-        '''
-        self.connections[user_data['username']] = friend_list
-        yield from self.check_friendship(response, user_data, friend_list)
+            if friend not in self.tasks:
+                self.tasks.append(friend)
+            else:
+                friend_set.remove(friend)
+        print(1)
+        yield from self.save_connections(response, user_data, friend_set)
 
-    def check_friendship(self, response, user_data, friend_list):
+    def save_connections(self, response, user_data, friend_set) -> list:
         '''
-        метод, который проверяет, есть ли пользователь2 в существующих связях
-        @param self:
-        @param user_data: данные текущего пользователя
-        @param friend_list: список пользователей
-        @return: перенаправлет данные в зависимости от выполнения условия
+        метод, который сохраняет пользователей в единую структуру
+        @return: list of connections between users
         '''
-        
-        if  self.user2 in friend_list:
-            print("Вернуть в метод, который найдет ключи")
-            yield from self.get_connections()
-        else:
-            self.users = friend_list
-            print('вернуть лист на парсинг юзеров')
-            yield from self.parse_task_users(response)
+        for name in friend_set:
+            friend = {
+                'of_user': user_data['username'],
+                'friend': name
+            }
+            self.connections.append(friend)
+            if name == self.user2:
+                print('Yeeeah it is found!')
+                yield from self.get_connections()
+        self.users = list(friend_set)
+        print(1)
+        yield from self.parse_task_users(response)
 
     def get_connections(self):
+        print('We found it!')
         '''
         @return: будет добывать родительские элементы словаря и выводить их
         '''
