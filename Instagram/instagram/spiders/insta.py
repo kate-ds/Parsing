@@ -2,6 +2,7 @@ import scrapy
 import json
 from datetime import datetime
 from instagram.instagram.items import InstagramTagItem, InstagramPostItem, InstagramUserFollowers
+import sys
 
 
 class InstaSpider(scrapy.Spider):
@@ -27,7 +28,7 @@ class InstaSpider(scrapy.Spider):
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
         self.users = ['s_katrinka']
-        self.user2 = 'ubaldosv'
+        self.user2 = 'daria_burceva'
         self.connection = f"Connection : {self.user2}"
         self.tasks = []
 
@@ -238,6 +239,8 @@ class InstaSpider(scrapy.Spider):
                 self.users.append(name)
             else:
                 yield from self.get_connections(self.user2)
+                print('Found!\n', self.connection)
+                sys.exit()
         yield from self.parse_task_users(response)
 
     def get_connections(self, name):
@@ -249,7 +252,7 @@ class InstaSpider(scrapy.Spider):
             if user['friend'] == name:
                 self.connection += ' - ' + str(user['of_user'])
                 yield from self.get_connections(user['of_user'])
-        print('Found!\n', self.connection)
+
 
 
 
