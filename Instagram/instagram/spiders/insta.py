@@ -2,6 +2,7 @@ import scrapy
 import json
 from datetime import datetime
 from instagram.instagram.items import InstagramTagItem, InstagramPostItem, InstagramUserFollowers
+import sys
 
 
 class InstaSpider(scrapy.Spider):
@@ -12,6 +13,7 @@ class InstaSpider(scrapy.Spider):
     followers_data = {}
     user_followers_data = {}
     user_follow_data = {}
+    connections = []
     current_tag = ""
     database_collection = ""
     hash = {
@@ -25,7 +27,11 @@ class InstaSpider(scrapy.Spider):
         self.login = login
         self.password = password
         self.tags = []  # ['annecy', 'montpellier', 'travelinspiration']
-        self.users = ['s_katrinka', 'pwpav', 'daria_burceva']
+        self.users = ['s_katrinka']
+        self.user2 = 'daria_burceva'
+        self.connection = f"Connection : {self.user2}"
+        self.tasks = []
+
         super().__init__(*args, **kwargs)
 
     def parse(self, response, *args, **kwargs):
@@ -121,13 +127,14 @@ class InstaSpider(scrapy.Spider):
             data=post_data,
             images=post_data['display_url'])
 
-    # ---------------------------------------User Followers and Follow---------------------------------------------
+    # --------------------------------------- User Followers and Follow ---------------------------------------------
 
     def parse_task_users(self, response):
         for user in self.users:
-            yield response.follow(f'/{user}/', callback=self.user_page_parse)
+            yield response.follow(f'/{user}/', callback=self.user_page_parse, cb_kwargs={"user": user})
 
-    def user_page_parse(self, response):
+    def user_page_parse(self, response, user):
+        self.users.remove(user)
         user_data = self.js_data_extractor(response)['entry_data']['ProfilePage'][0]['graphql']['user']
         yield from self.followers_api_parse(response, user_data)
 
@@ -139,8 +146,7 @@ class InstaSpider(scrapy.Spider):
         url = f"/graphql/query/?query_hash={self.hash['user_followers']}&variables={json.dumps(variables)}"
         yield response.follow(url, callback=self.get_followers_data, cb_kwargs={"user_data": user_data})
 
-    def get_followers_data(self, response,
-                           user_data):
+    def get_followers_data(self, response, user_data):
         followers_data = response.json()['data']['user']['edge_followed_by']['edges']
         page_data = response.json()['data']['user']['edge_followed_by']['page_info']
         if not user_data['username'] in self.user_followers_data:
@@ -178,6 +184,8 @@ class InstaSpider(scrapy.Spider):
         else:
             if len(self.user_follow_data[user_data['username']]) == user_data['edge_follow']['count']:
                 yield from self.get_full_data(user_data)
+                yield from self.get_friends(response, user_data)
+
 
     def get_full_data(self, user_data):
         self.database_collection = "Users"
@@ -189,4 +197,63 @@ class InstaSpider(scrapy.Spider):
             followers_data=self.user_followers_data[user_data['username']],  # те, кто подписан на пользователя
             follow_data=self.user_follow_data[user_data['username']]      # на кого подписан сам пользователь
         )
+
+
+# --------------------------------------- User Friends Connections ---------------------------------------------
+
+    def get_friends(self, response, user_data) -> set:
+        '''
+        Метод из полученных данных будет делать лист друзей (взаимные подписки)
+        @return: set of friends
+        '''
+        follow =  self.user_follow_data[user_data['username']].values()
+        followers = self.user_followers_data[user_data['username']].values()
+        friend_set = set(follow) & set(followers)
+        yield from self.save_connections(response, user_data, friend_set)
+
+    def get_unique_tasks(self, response, user_data, friend_set) -> set:
+        '''
+        Метод будет проверять уникальность пользователя, чтобы он не попал на парсинг повторно
+        @return: set of unique users
+        '''
+        for friend in friend_set:
+
+            if friend not in self.tasks:
+                self.tasks.append(friend)
+            else:
+                friend_set.remove(friend)
+        yield from self.save_connections(response, user_data, friend_set)
+
+    def save_connections(self, response, user_data, friend_set) -> list:
+        '''
+        метод, который сохраняет пользователей в единую структуру
+        @return: list of connections between users
+        '''
+        for name in friend_set:
+            friend = {
+                'of_user': user_data['username'],
+                'friend': name
+            }
+            self.connections.append(friend)
+            if name != self.user2:
+                self.users.append(name)
+            else:
+                yield from self.get_connections(self.user2)
+                print('Found!\n', self.connection)
+                sys.exit()
+        yield from self.parse_task_users(response)
+
+    def get_connections(self, name):
+        '''
+        будет добывать родительские элементы словаря и выводить их
+        @return: string with message
+        '''
+        for user in self.connections:
+            if user['friend'] == name:
+                self.connection += ' - ' + str(user['of_user'])
+                yield from self.get_connections(user['of_user'])
+
+
+
+
 
