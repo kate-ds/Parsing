@@ -1,3 +1,5 @@
+# Default ignored files
+/workspace.xml
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -109,7 +111,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-parse_venv
 
 # Spyder project settings
 .spyderproject
@@ -128,10 +129,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-tmp/
-parse_venv/
-.idea/
-*.zip
-.DS_Store
-
-instagram.images
